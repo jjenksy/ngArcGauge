@@ -1,0 +1,26 @@
+{
+  "name": "jenksy-ngGauge",
+  "description": "An arc gauge for data visualization",
+  "version": "0.0.0",
+  "homepage": "https://github.com/jjenksy/ngArcGauge",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "~1.5.0",
+    "angular-route": "~1.5.0",
+    "angular-loader": "~1.5.0",
+    "angular-mocks": "~1.5.0",
+    "html5-boilerplate": "^5.3.0"
+  },
+  "main": "app.js",
+  "authors": [
+    "John Jenkins"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/bower_components",
+    "test",
+    "tests"
+  ]
+}
