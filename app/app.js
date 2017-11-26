@@ -15,6 +15,7 @@ app.directive('arcGauge', function () {
         scope: {
             //@ reads the attribute value, = provides two-way binding, & works with functions
             title: '@'         },
+        //todo set the id dynamically
         template: '<div id="power-gauge"></div>',
         // templateUrl: 'mytemplate.html',
         link: function ($scope, element, attrs) {
@@ -27,7 +28,7 @@ app.directive('arcGauge', function () {
                     ringInset					: 20,
                     ringWidth					: 20,
 
-                    pointerWidth				: 10,
+                    pointerWidth				: 1,
                     pointerTailLength			: 5,
                     pointerHeadLengthPercent	: 0.9,
 
@@ -149,7 +150,7 @@ app.directive('arcGauge', function () {
                         [-(config.pointerWidth / 2), 0],
                         [0, config.pointerTailLength],
                         [config.pointerWidth / 2, 0] ];
-                    var pointerLine = d3.line().curve(d3.curveLinear)
+                    var pointerLine = d3.line().curve(d3.curveLinear);
                     var pg = svg.append('g').data([lineData])
                         .attr('class', 'pointer')
                         .attr('transform', centerTx);
