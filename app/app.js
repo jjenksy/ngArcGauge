@@ -29,7 +29,7 @@ app.directive('arcGauge', function () {
                     ringWidth					: 20,
 
                     pointerWidth				: 1,
-                    pointerTailLength			: 5,
+                    pointerTailLength			: 1,
                     pointerHeadLengthPercent	: 0.9,
 
                     minValue					: 0,
@@ -49,7 +49,6 @@ app.directive('arcGauge', function () {
                 var range = undefined;
                 var r = undefined;
                 var pointerHeadLength = undefined;
-                var value = 0;
 
                 var svg = undefined;
                 var arc = undefined;
@@ -58,17 +57,11 @@ app.directive('arcGauge', function () {
                 var tickData = undefined;
                 var pointer = undefined;
 
-                var donut = d3.pie();
 
                 function deg2rad(deg) {
                     return deg * Math.PI / 180;
                 }
 
-                function newAngle(d) {
-                    var ratio = scale(d);
-                    var newAngle = config.minAngle + (ratio * range);
-                    return newAngle;
-                }
 
                 function configure(configuration) {
                     var prop = undefined;
@@ -150,9 +143,11 @@ app.directive('arcGauge', function () {
                         [-(config.pointerWidth / 2), 0],
                         [0, config.pointerTailLength],
                         [config.pointerWidth / 2, 0] ];
+
                     var pointerLine = d3.line().curve(d3.curveLinear);
-                    var pg = svg.append('g').data([lineData])
+                    var pg = svg.append('g')
                         .attr('class', 'pointer')
+                        .data([lineData])
                         .attr('transform', centerTx);
 
                     pointer = pg.append('path')
@@ -170,7 +165,6 @@ app.directive('arcGauge', function () {
                     var newAngle = config.minAngle + (ratio * range);
                     pointer.transition()
                         .duration(config.transitionMs)
-                        .ease(d3.easeElastic)
                         .attr('transform', 'rotate(' +newAngle +')');
                 }
                 that.update = update;
@@ -208,9 +202,9 @@ app.directive('arcGauge', function () {
 
                 // every few seconds update reading values
                 updateReadings();
-                setInterval(function() {
-                    updateReadings();
-                }, 5 * 1000);
+                // setInterval(function() {
+                //     updateReadings();
+                // }, 5 * 1000);
             }
 
             if ( !window.isLoaded ) {
