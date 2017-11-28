@@ -31,6 +31,7 @@ app.directive('arcGauge', function () {
                     pointerWidth				: 1,
                     pointerTailLength			: 1,
                     pointerHeadLengthPercent	: 0.9,
+                    pointerOffset               : -65,
 
                     minValue					: 0,
                     maxValue					: 10,
@@ -72,7 +73,6 @@ app.directive('arcGauge', function () {
                     range = config.maxAngle - config.minAngle;
                     r = config.size / 2;
                     pointerHeadLength = Math.round(r * config.pointerHeadLengthPercent);
-
                     // a linear scale that maps domain values to a percent from 0..1
                     scale = d3.scaleLinear()
                         .range([0,1])
@@ -128,6 +128,7 @@ app.directive('arcGauge', function () {
                     var lg = svg.append('g')
                         .attr('class', 'label')
                         .attr('transform', centerTx);
+
                     lg.selectAll('text')
                         .data(ticks)
                         .enter().append('text')
@@ -137,18 +138,21 @@ app.directive('arcGauge', function () {
                             return 'rotate(' +newAngle +') translate(0,' +(config.labelInset - r) +')';
                         })
                         .text(config.labelFormat);
-
-                    var lineData = [ [config.pointerWidth / 2, 0],
+                    //M0.5,-65 L0,-135 L-0.5,-65 L0,-65 L0.5,-65
+                    var lineData = [ [config.pointerWidth / 2, config.pointerOffset],
                         [0, -pointerHeadLength],
-                        [-(config.pointerWidth / 2), 0],
-                        [0, config.pointerTailLength],
-                        [config.pointerWidth / 2, 0] ];
+                        [-(config.pointerWidth / 2), config.pointerOffset],
+                        [0, config.pointerOffset],
+                        [config.pointerWidth / 2, config.pointerOffset] ];
 
                     var pointerLine = d3.line().curve(d3.curveLinear);
                     var pg = svg.append('g')
                         .attr('class', 'pointer')
                         .data([lineData])
-                        .attr('transform', centerTx);
+                        .attr("stroke", "green")
+                        .attr('transform', 'translate('+r +','+ r +')');
+
+
 
                     pointer = pg.append('path')
                         .attr('d', pointerLine/*function(d) { return pointerLine(d) +'Z';}*/ )
