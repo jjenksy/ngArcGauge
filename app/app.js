@@ -27,25 +27,25 @@ app.directive('arcGauge', function () {
                     clipHeight					: 110,
                     ringInset					: 20,
                     ringWidth					: 20,
-
+                    pointerColor                : "#03f704",
                     pointerWidth				: 1,
                     pointerTailLength			: 1,
                     pointerHeadLengthPercent	: 0.9,
                     pointerOffset               : -65,
-
+                    upperArcColor               : "#207b3e", //color for the upper arc
                     minValue					: 0,
                     maxValue					: 10,
 
                     minAngle					: -90,
                     maxAngle					: 90,
-
+                    textColor                   : "#e7a61a",
                     transitionMs				: 750,
 
                     majorTicks					: 5,
                     labelFormat					: d3.format('d'),
                     labelInset					: 10,
 
-                    arcColorFn					: d3.interpolateHsl(d3.rgb('#e8e2ca'), d3.rgb('#3e6c0a'))
+                    arcColorFn					: d3.interpolateHsl(d3.rgb('#445467'), d3.rgb('#445467'))
                 };
                 var range = undefined;
                 var r = undefined;
@@ -137,7 +137,8 @@ app.directive('arcGauge', function () {
                             var newAngle = config.minAngle + (ratio * range);
                             return 'rotate(' +newAngle +') translate(0,' +(config.labelInset - r) +')';
                         })
-                        .text(config.labelFormat);
+                        .text(config.labelFormat)
+                        .attr('fill', config.textColor);
                     //M0.5,-65 L0,-135 L-0.5,-65 L0,-65 L0.5,-65
                     var lineData = [ [config.pointerWidth / 2, config.pointerOffset],
                         [0, -pointerHeadLength],
@@ -149,7 +150,7 @@ app.directive('arcGauge', function () {
                     var pg = svg.append('g')
                         .attr('class', 'pointer')
                         .data([lineData])
-                        .attr("stroke", "green")
+                        .attr("stroke", config.pointerColor)
                         .attr('transform', 'translate('+r +','+ r +')');
 
 
@@ -194,14 +195,16 @@ app.directive('arcGauge', function () {
                     clipWidth: 300,
                     clipHeight: 300,
                     ringWidth: 60,
-                    maxValue: 10,
+                    maxValue: 100,
+                    majorTicks: 10, //how many ticks to display
                     transitionMs: 4000,
+                    textColor:"#e7a61a"
                 });
                 powerGauge.render();
 
                 function updateReadings() {
                     // just pump in random data here...
-                    powerGauge.update(Math.random() * 10);
+                    powerGauge.update(Math.random() * 100);
                 }
 
                 // every few seconds update reading values
