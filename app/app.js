@@ -3,23 +3,18 @@
 // Declare app level module which depends on views, and components
 var app = angular.module('ngJenksy', [
   'ngRoute',
-  'myApp.view1',
-  'myApp.view2',
   'myApp.version'
 ]);
 
 app.directive('arcGauge', function () {
     return {
         //template for directive
-        restrict: 'EA', //E = element, A = attribute, C = class, M = comment
-        scope: {
-            //@ reads the attribute value, = provides two-way binding, & works with functions
-            title: '@'         },
+        restrict: 'E', //E = element, A = attribute, C = class, M = comment
+        scope: { arggaugevalue: '@'},
         //todo set the id dynamically
         template: '<div id="power-gauge"></div>',
         // templateUrl: 'mytemplate.html',
-        link: function ($scope, element, attrs) {
-
+        link: function (scope, element, attrs) {
             var gauge = function(container, configuration) {
                 var that = {};
                 var config = {
@@ -198,6 +193,7 @@ app.directive('arcGauge', function () {
                 }
                 that.render = render;
                 function update(newValue, newConfiguration) {
+                    console.log(newValue);
                         configure(newConfiguration, newValue);
                     var ratio = scale(newValue);
                     var newAngle = config.minAngle + (ratio * range);
@@ -213,7 +209,7 @@ app.directive('arcGauge', function () {
                 return that;
             };
             //init the function
-            function onDocumentReady() {
+
                 var powerGauge = gauge('#power-gauge', {
                     size: 300,
                     clipWidth: 350,//width of the canvas
@@ -226,67 +222,26 @@ app.directive('arcGauge', function () {
                 });
                 powerGauge.render();
 
-                function updateReadings() {
-                    // just pump in random data here to fixed changes to the 100th p
-                    var num = (Math.random() * 100).toFixed(2);
-                    powerGauge.update(num);
-                }
 
-                // every few seconds update reading values
-                updateReadings();
-                setInterval(function() {
-                    updateReadings();
-                }, 5 * 1000);
-            }
+                powerGauge.update(scope.arggaugevalue);
 
-            if ( !window.isLoaded ) {
-                window.addEventListener("load", function() {
-                    onDocumentReady();
-                }, false);
-            } else {
-                onDocumentReady();
-            }
         }
     }
 });
 
 
-app.controller('CustomersController', ['$scope', function ($scope) {
-    var counter = 0;
-    $scope.customer = {
-        name: 'David',
-        street: '1234 Anywhere St.'
-    };
+app.controller('GraphController', ['$scope', function ($scope) {
+    $scope.gaugevalue = 0;
 
-    $scope.customers = [
-        {
-            name: 'David',
-            street: '1234 Anywhere St.'
-        },
-        {
-            name: 'Tina',
-            street: '1800 Crest St.'
-        },
-        {
-            name: 'Michelle',
-            street: '890 Main St.'
-        }
-    ];
+    function updateReadings() {
+        // just pump in random data here to fixed changes to the 100th p
+        $scope.gaugevalue = (Math.random() * 100).toFixed(2);
+        console.log($scope.gaugevalue);
+    }
 
-    $scope.addCustomer = function () {
-        counter++;
-        $scope.customers.push({
-            name: 'New Customer' + counter,
-            street: counter + ' Cedar Point St.'
-        });
-    };
+    setInterval(function() {
+        updateReadings();
+    }, 5 * 1000);
 
-    $scope.changeData = function () {
-        counter++;
-        $scope.customer = {
-            name: 'James',
-            street: counter + ' Cedar Point St.'
-        };
-    };
 }]);
 
