@@ -17,10 +17,22 @@
 </head>
 <body>
 
-  <ul ng-controller="GraphController">
-    {{gaugevalue}}
-    <!--gaugeid must be set in order to get the id from the gauge-->
-    <arc-gauge gaugeid="gaugeId" id="gauge" arggaugevalue="{{gaugevalue}}"></arc-gauge>
+  <ul ng-controller="GraphController as vm">
+    <!--gaugeid must be set in order to get the id from the gauge, arggaugevalue is used for the changing value,
+     maxvalue is the max for the gauge, ticks is for how many ticks you want diplayed, size adjust the size of the gauge
+     ringwidth is the width of the ring, canvas width and height sets the height and width of the canvas-->
+    <arc-gauge gaugeid="gaugeId"
+               id="gauge"
+               arggaugevalue="vm.gaugevalue"
+               maxvalue="100"
+               ticks="10"
+               size="300"
+               transitionspeed="3000"
+               ringwidth="60"
+               canvaswidth="350"
+               canvasheight="300"
+               >
+    </arc-gauge>
   </ul>
 
   <!--[if lt IE 7]>
